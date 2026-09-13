@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập Tài Xế - SAOVN</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Tông màu Green SM Tech */
+            --teal-primary: #00a896;
+            --teal-dark: #028090;
+            --teal-light: #e8f8f5;
+            
+            /* Thương hiệu SAOVN */
+            --brand-red: #da251c;
+            --brand-yellow: #ffde00;
+
+            --dark-text: #0f172a;
+            --body-text: #334155;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--body-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Top Navbar */
+        nav {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-box {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .logo-sao { color: var(--brand-red); }
+        .logo-vn { color: var(--brand-yellow); }
+
+        .logo-slogan {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--teal-dark);
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        .nav-right-group {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--teal-primary);
+        }
+
+        .btn-nav {
+            background: var(--teal-primary);
+            color: #fff !important;
+            padding: 9px 20px;
+            border-radius: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 168, 150, 0.25);
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .btn-nav:hover {
+            background: var(--teal-dark);
+        }
+
+        .mobile-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            cursor: pointer;
+        }
+
+        /* Main Login Section */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 0;
+            background: linear-gradient(135deg, var(--teal-light) 0%, #ffffff 100%);
+        }
+
+        .login-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .login-header h1 {
+            font-size: 1.8rem;
+            color: var(--dark-text);
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: var(--body-text);
+            font-size: 0.95rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i.input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 13px 45px 13px 45px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            background: #fff;
+            color: var(--dark-text);
+            transition: all 0.2s ease;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--teal-primary);
+            box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.15);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.2s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--teal-primary);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: var(--body-text);
+            font-weight: 600;
+        }
+
+        .remember-me input {
+            accent-color: var(--teal-primary);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: var(--teal-dark);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-link:hover {
+            color: var(--teal-primary);
+            text-decoration: underline;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--teal-primary);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 168, 150, 0.25);
+            transition: background 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background: var(--teal-dark);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .divider span {
+            padding: 0 12px;
+        }
+
+        .register-prompt {
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--body-text);
+        }
+
+        .register-prompt a {
+            color: var(--teal-primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .register-prompt a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            padding: 25px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 900px) {
+            .mobile-toggle {
+                display: block;
+            }
+
+            .nav-right-group {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: #ffffff;
+                flex-direction: column;
+                align-items: stretch;
+                padding: 20px;
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+                display: none;
+            }
+
+            .nav-right-group.active {
+                display: flex;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .btn-nav {
+                text-align: center;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <a href="index.html" class="logo-box">
+                <div class="logo-text"><span class="logo-sao">SAO</span><span class="logo-vn">VN</span></div>
+                <div class="logo-slogan">Tổ Chức Hành Động Đặc Biệt Vì Việt Nam</div>
+                <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 600;">Special Action Organization For Vietnam</div>
+            </a>
+
+            <div class="mobile-toggle" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+
+            <div class="nav-right-group" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="index.html"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+                    <li><a href="index.html#about-section"><i class="fa-solid fa-circle-info"></i> Giới thiệu</a></li>
+                    <li><a href="index.html#news-section"><i class="fa-solid fa-newspaper"></i> Tin tức</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="index.html#register-form" class="btn-nav"><i class="fa-solid fa-user-plus"></i> Đăng ký gia nhập</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Form -->
+    <main>
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Đăng Nhập Tài Xế</h1>
+                <p>Truy cập hệ thống quản trị dành cho tài xế SAOVN</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="phone">Số điện thoại *</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-phone input-icon"></i>
+                        <input type="tel" id="phone" placeholder="Nhập số điện thoại của bạn" required pattern="[0-9]{10,11}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu *</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" id="password" placeholder="Nhập mật khẩu của bạn" required>
+                        <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        Ghi nhớ đăng nhập
+                    </label>
+                    <a href="#" class="forgot-link" onclick="handleForgotPassword()">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>CHƯA CÓ TÀI KHOẢN?</span>
+            </div>
+
+            <div class="register-prompt">
+                Bạn chưa là tài xế thành viên? <a href="index.html#register-form">Đăng ký gia nhập ngay</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 SAOVN - Tổ Chức Hành Động Đặc Biệt Vì Việt Nam. Đồng hành cùng sự nghiệp tài xế Việt.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Xử lý Responsive Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.className = 'fa-solid fa-xmark';
+            } else {
+                icon.className = 'fa-solid fa-bars';
+            }
+        });
+
+        // Ẩn/Hiện Mật Khẩu
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Xử Lý Sự Kiện Submit Đăng Nhập (Tự động chuyển SĐT -> Email ảo cho Firebase/Backend)
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            // Lấy SĐT và làm sạch (bỏ khoảng trắng)
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+
+            // Tạo email ảo dạng: [sodienthoai]@saovn.com
+            const virtualEmail = `${phone}@saovn.com`;
+
+            // Log ra console để bạn kiểm tra payload
+            console.log("Xác thực Email ảo:", virtualEmail);
+
+            /* 
+               Tích hợp Firebase Auth ví dụ:
+               firebase.auth().signInWithEmailAndPassword(virtualEmail, password)
+                   .then((userCredential) => { ... })
+                   .catch((error) => { ... });
+            */
+
+            alert(`Đăng nhập thành công!\nSĐT: ${phone}\n(Email hệ thống: ${virtualEmail})\nĐang chuyển hướng sang trang dành cho Tài xế...`);
+        });
+
+        // Quên mật khẩu
+        function handleForgotPassword() {
+            const phone = prompt('Vui lòng nhập Số điện thoại đã đăng ký để nhận mã khôi phục mật khẩu:');
+            if (phone) {
+                alert(`Yêu cầu khôi phục mật khẩu cho SĐT [${phone}] đã được gửi. Vui lòng kiểm tra tin nhắn/Zalo.`);
+            }
+        }
+    </script>
+</body>
+</html>

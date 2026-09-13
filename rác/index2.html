@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAOVN - Tổ Chức Hành Động Đặc Biệt Vì Việt Nam</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Tông màu Green SM Tech */
+            --teal-primary: #00a896;
+            --teal-dark: #028090;
+            --teal-light: #e8f8f5;
+            
+            /* Thương hiệu SAOVN */
+            --brand-red: #da251c;
+            --brand-yellow: #ffde00;
+
+            --dark-text: #0f172a;
+            --body-text: #334155;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--body-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Top Navbar */
+        nav {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-box {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+        }
+
+        /* Logo SAOVN viết liền, chữ SAO đỏ, VN vàng */
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .logo-sao { color: var(--brand-red); }
+        .logo-vn { color: var(--brand-yellow); }
+
+        .logo-slogan {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--teal-dark);
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        .btn-nav {
+            background: var(--teal-primary);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 168, 150, 0.25);
+        }
+
+        .btn-nav:hover {
+            background: var(--teal-dark);
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, var(--teal-light) 0%, #ffffff 100%);
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-wrapper {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .badge-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 168, 150, 0.12);
+            color: var(--teal-dark);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: 2.4rem;
+            color: var(--dark-text);
+            line-height: 1.25;
+            margin-bottom: 16px;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: var(--body-text);
+            margin-bottom: 24px;
+        }
+
+        /* Sections */
+        section {
+            padding: 55px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: var(--dark-text);
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        /* SLIDER NEWS SECTION (Green SM Style) */
+        .news-slider-container {
+            position: relative;
+            max-width: 100%;
+            margin: 0 auto;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .slide-item {
+            min-width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #ffffff;
+        }
+
+        .slide-image {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+        }
+
+        .slide-content {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, #ffffff 0%, var(--teal-light) 100%);
+        }
+
+        .slide-tag {
+            align-self: flex-start;
+            background: var(--teal-primary);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .slide-content h3 {
+            font-size: 1.6rem;
+            color: var(--dark-text);
+            font-weight: 800;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .slide-content p {
+            font-size: 0.98rem;
+            color: var(--body-text);
+            margin-bottom: 20px;
+        }
+
+        .slide-date {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        /* Slider Controls */
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--border-color);
+            color: var(--dark-text);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+        }
+
+        .slider-btn:hover {
+            background: var(--teal-primary);
+            color: #fff;
+        }
+
+        .slider-btn.prev { left: 15px; }
+        .slider-btn.next { right: 15px; }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 15px;
+            right: 40px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(0, 168, 150, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--teal-primary);
+            width: 28px;
+            border-radius: 12px;
+        }
+
+        /* Table Style */
+        .table-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+
+        .comp-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comp-table th, .comp-table td {
+            padding: 18px 22px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .comp-table th {
+            background: var(--teal-light);
+            color: var(--teal-dark);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .col-feature { width: 22%; font-weight: 700; color: var(--dark-text); }
+        .col-old { width: 39%; color: var(--danger-color); background: #fff5f5; }
+        .col-new { width: 39%; color: var(--success-color); background: #f0fdf4; font-weight: 600; }
+
+        /* Feature Cards */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card-item {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            transition: transform 0.25s ease;
+        }
+
+        .card-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--teal-primary);
+        }
+
+        .icon-box {
+            width: 52px;
+            height: 52px;
+            background: var(--teal-light);
+            color: var(--teal-primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 18px;
+        }
+
+        .card-item h3 {
+            color: var(--dark-text);
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        /* Form */
+        .form-wrapper {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 650px;
+            margin: 0 auto;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            background: #fff;
+            color: var(--dark-text);
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--teal-primary);
+            box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.15);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--teal-primary);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(0, 168, 150, 0.25);
+        }
+
+        footer {
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-wrapper { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 1.9rem; }
+            .slide-item { grid-template-columns: 1fr; }
+            .slide-image { height: 220px; }
+            .slide-content { padding: 24px; }
+            .slider-dots { right: 50%; transform: translateX(50%); }
+            .comp-table th, .comp-table td { padding: 12px; font-size: 0.85rem; }
+            .form-wrapper { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="logo-box">
+                <div class="logo-text"><span class="logo-sao">SAO</span><span class="logo-vn">VN</span></div>
+                <div class="logo-slogan">Tổ Chức Hành Động Đặc Biệt Vì Việt Nam</div>
+                <div style="font-size: 0.65rem; color: #94a3b8; font-weight: 600;">Special Action Organization For Vietnam</div>
+            </a>
+            <a href="#register-form" class="btn-nav">Đăng ký gia nhập</a>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <div class="hero">
+        <div class="container hero-wrapper">
+            <div>
+                <span class="badge-tag"><i class="fa-solid fa-flag"></i> Nền Tảng Khởi Tạo Bởi Người Trong Nghề</span>
+                <h1>Bạn là Thành Viên kiến tạo,<br>Không phải đối tác "tự bơi"</h1>
+                <p>Chúng tôi chấm dứt tư duy coi "khách hàng là trên hết" để đẩy mọi bất công lên vai tài xế. Tại SAOVN, sự thật và sự công bằng cho thành viên là ưu tiên tuyệt đối.</p>
+                <a href="#register-form" class="btn-nav" style="display: inline-block; padding: 14px 32px; font-size: 1.05rem;">Đăng Ký Gia Nhập Ngay</a>
+            </div>
+            <div>
+                <div style="background: #ffffff; padding: 24px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 18px;">
+                        <i class="fa-solid fa-scale-balanced" style="font-size: 2.2rem; color: var(--teal-primary);"></i>
+                        <div>
+                            <strong style="color: var(--dark-text); display: block; font-size: 1.05rem;">Chỉ Ưu Tiên Sự Thật</strong>
+                            <span style="font-size: 0.85rem; color: #64748b;">Không còn cảnh tài xế bị xử ép hay khóa tài khoản vô lý</span>
+                        </div>
+                    </div>
+                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin-bottom: 18px;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <i class="fa-solid fa-house-chimney-heart" style="font-size: 2.2rem; color: var(--teal-primary);"></i>
+                        <div>
+                            <strong style="color: var(--dark-text); display: block; font-size: 1.05rem;">Trân Trọng Thời Gian Gia Đình</strong>
+                            <span style="font-size: 0.85rem; color: #64748b;">Phát cuốc đều đặn để bạn sớm hoàn thành công việc về nhà</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+       
+
+        <!-- Bảng So Sánh Quyền Lợi -->
+        <section>
+            <div class="section-header">
+                <h2>So Sánh Quyền Lợi Minh Bạch</h2>
+                <p>Khác biệt hoàn toàn giữa nền tảng ép buộc và nền tảng tôn trọng thành viên</p>
+            </div>
+
+            <div class="table-card">
+                <table class="comp-table">
+                    <thead>
+                        <tr>
+                            <th class="col-feature">Nội Dung So Sánh</th>
+                            <th class="col-old"><i class="fa-solid fa-xmark-circle"></i> Nền Tảng Cũ</th>
+                            <th class="col-new"><i class="fa-solid fa-check-circle"></i> Nền Tảng SAOVN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-feature">Thời Gian & Gia Đình</td>
+                            <td class="col-old">Cố tình giam cuốc gần đủ bill, bắt tài xế cày đêm muộn, mất hết thời gian cho bản thân và gia đình.</td>
+                            <td class="col-new">Phát cuốc đều đặn để anh em nhanh hoàn thành chỉ tiêu, sớm về nghỉ ngơi và chăm sóc gia đình.</td>
+                        </tr>
+                        <tr>
+                            <td class="col-feature">Xử Lý Mâu Thuẫn</td>
+                            <td class="col-old">Coi khách hàng là trên hết, giội mọi đòn trừng phạt và bất công lên đầu tài xế không cần xác minh.</td>
+                            <td class="col-new">Chỉ tôn trọng SỰ THẬT. Xét đoán bằng chứng minh bạch, bảo vệ tài xế trước các khiếu nại ảo.</td>
+                        </tr>
+                        <tr>
+                            <td class="col-feature">Vai Trò Tài Xế</td>
+                            <td class="col-old">Coi tài xế là người làm thuê hoặc "đối tác tự bơi", thích cắt phế ép phí lúc nào tùy ý.</td>
+                            <td class="col-new">Coi bạn là THÀNH VIÊN tạo nên hệ thống, được lắng nghe và cùng tham gia phát triển.</td>
+                        </tr>
+                        <tr>
+                            <td class="col-feature">Khoảng Cách Nổ Cuốc</td>
+                            <td class="col-old">Tài xế ở gần ngồi chờ, cuốc lại nổ cho người ở xa cách hàng cây số chạy lại đón.</td>
+                            <td class="col-new">Ưu tiên tuyệt đối tài xế gần nhất, tối ưu đường đi và tiết kiệm tối đa nhiên liệu.</td>
+                        </tr>
+                        <tr>
+                            <td class="col-feature">Khách Nhây Đợi Lâu</td>
+                            <td class="col-old">Khách chưa xong việc đã đặt, bắt tài xế đợi vô thời hạn nhưng không cho hủy.</td>
+                            <td class="col-new">Tính tiền chờ tự động. Hết giờ quy định được phép hủy chuyến hợp lệ không phạt.</td>
+                        </tr>
+                        <tr>
+                            <td class="col-feature">Chính Sách Chiết Khấu</td>
+                            <td class="col-old">Chiết khấu cao cắt cổ, tự ý tăng giá/tăng phí mà không hỏi ý kiến.</td>
+                            <td class="col-new">Chiết khấu cực thấp (chỉ vừa đủ vận hành). Tăng chiết khấu phải thông qua biểu quyết tài xế.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Trụ Cột Giá Trị -->
+        <section>
+            <div class="section-header">
+                <h2>Cam Kết Đồng Hành Lâu Dài</h2>
+                <p>Hệ sinh thái hỗ trợ toàn diện giúp anh em an tâm xây dựng tương lai</p>
+            </div>
+
+            <div class="grid-cards">
+                <div class="card-item">
+                    <div class="icon-box"><i class="fa-solid fa-people-roof"></i></div>
+                    <h3>Thành Viên Hệ Thống</h3>
+                    <p>Bạn không phải đối tác lẻ loi tự bơi giữa đường. SAOVN xem mỗi tài xế là thành viên nòng cốt, cùng chia sẻ giá trị và đóng góp cải thiện hệ thống hàng tuần.</p>
+                </div>
+
+                <div class="card-item">
+                    <div class="icon-box"><i class="fa-solid fa-chart-pie"></i></div>
+                    <h3>Cơ Hội Thu Nhập Thụ Động</h3>
+                    <p>Không thể chạy xe cả đời. Thành viên SAOVN được tạo điều kiện tham gia nhận cổ phần lợi nhuận từ các hoạt động kinh doanh thực tế trong hệ sinh thái:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px; font-size: 0.9rem;">
+                        <li>Chuỗi F&B và Cửa hàng tiện lợi</li>
+                        <li>Sản xuất & Phân phối nước đóng chai</li>
+                        <li>Hệ thống Rửa & Chăm sóc xe chuyên nghiệp</li>
+                    </ul>
+                </div>
+
+                <div class="card-item">
+                    <div class="icon-box"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                    <h3>Lộ Trình Dứt Nợ Xe</h3>
+                    <p>Thấu hiểu gánh nặng trả góp ngân hàng, SAOVN thiết lập thuật toán tối ưu lượng chuyến thực nhận, giúp anh em sớm dứt nợ xe để sở hữu tài sản riêng.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Form Đăng Ký -->
+        <section id="register-form">
+            <div class="form-wrapper">
+                <h2 style="text-align: center; color: var(--dark-text); font-size: 1.75rem; margin-bottom: 8px;">Đăng Ký Gia Nhập SAOVN</h2>
+                <p style="text-align: center; color: var(--body-text); margin-bottom: 24px; font-size: 0.95rem;">Hãy để lại thông tin để gia nhập cộng đồng tài xế làm chủ công nghệ</p>
+
+                <form id="driverForm">
+                    <div class="form-group">
+                        <label for="fullname">Họ và tên tài xế *</label>
+                        <input type="text" id="fullname" name="fullname" placeholder="Nguyễn Văn A" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại (Zalo) *</label>
+                        <input type="tel" id="phone" name="phone" placeholder="VD: 0901234567" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="license_plate">Biển số xe hoạt động *</label>
+                        <input type="text" id="license_plate" name="license_plate" placeholder="VD: 59A-123.45 hoặc 50-M1 999.99" style="text-transform: uppercase;" required>
+                        <small style="color: #64748b;">Hệ thống tự động lưu tra cứu biển số để tránh liên hệ trùng lặp khi đi tư vấn thực địa.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vehicle_type">Loại phương tiện *</label>
+                        <select id="vehicle_type" name="vehicle_type" required>
+                            <option value="">-- Chọn loại xe --</option>
+                            <option value="2wheel">Xe 2 bánh (Xe máy)</option>
+                            <option value="4wheel_4seat">Xe 4 bánh (4 - 5 chỗ)</option>
+                            <option value="4wheel_7seat">Xe 4 bánh (7 chỗ)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vehicle_status">Tình trạng tài chính xe *</label>
+                        <select id="vehicle_status" name="vehicle_status" required>
+                            <option value="">-- Chọn tình trạng --</option>
+                            <option value="installment">Đang trả góp ngân hàng / Thuê xe</option>
+                            <option value="owned">Xe đã sở hữu hoàn toàn</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="area">Khu vực hoạt động chính *</label>
+                        <input type="text" id="area" name="area" placeholder="VD: TP. Hồ Chí Minh, Bình Dương..." required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Nộp Đăng Ký Gia Nhập</button>
+                </form>
+            </div>
+        </section>
+
+         <!-- MỤC TIN TỨC & LỘ TRÌNH PHÁT TRIỂN (SLIDER GREEN SM STYLE) -->
+        <section>
+            <div class="section-header">
+                <h2>Cập Nhật Tin Tức & Lộ Trình Phát Triển</h2>
+                <p>Thông tin minh bạch về các bước tiến và định hướng chiến lược của SAOVN</p>
+            </div>
+
+            <div class="news-slider-container">
+                <button class="slider-btn prev" onclick="moveSlide(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="slider-btn next" onclick="moveSlide(1)"><i class="fa-solid fa-chevron-right"></i></button>
+
+                <div class="slider-track" id="sliderTrack">
+                    <!-- Slide 1 -->
+                    <div class="slide-item">
+                        <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80" alt="Lộ trình phát triển" class="slide-image">
+                        <div class="slide-content">
+                            <span class="slide-tag">Lộ Trình Hệ Thống</span>
+                            <h3>Cập Nhật Tính Năng Tra Cứu Biển Số & Phân Cuốc Thông Minh</h3>
+                            <p>Hệ thống tự động nhận diện vị trí tối ưu, giảm khoảng cách đón khách xuống dưới 1km và đảm bảo phát cuốc đều đặn, không giam cuốc tài xế.</p>
+                            <span class="slide-date"><i class="fa-regular fa-calendar"></i> Tháng 04/2026</span>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2 -->
+                    <div class="slide-item">
+                        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80" alt="Hệ sinh thái tài xế" class="slide-image">
+                        <div class="slide-content">
+                            <span class="slide-tag">Hệ Sinh Thái SAOVN</span>
+                            <h3>Triển Khai Mô Hình Thu Nhập Thụ Động Từ Chuỗi Cửa Hàng</h3>
+                            <p>Tài xế thành viên bắt đầu tham gia chia sẻ lợi nhuận từ các dịch vụ phụ trợ như hệ thống rửa xe, nước đóng chai và điểm dừng chân nghỉ ngơi.</p>
+                            <span class="slide-date"><i class="fa-regular fa-calendar"></i> Tháng 05/2026</span>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="slide-item">
+                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" alt="Cộng đồng SAOVN" class="slide-image">
+                        <div class="slide-content">
+                            <span class="slide-tag">Quyền Lợi Thành Viên</span>
+                            <h3>Cơ Chế Biểu Quyết Minh Bạch & Cơ Quan Bảo Vệ Tài Xế</h3>
+                            <p>Mọi điều chỉnh về chiết khấu và quy định vận hành đều bắt buộc đi qua biểu quyết của anh em. Chấm dứt tình trạng khóa tài khoản vô lý.</p>
+                            <span class="slide-date"><i class="fa-regular fa-calendar"></i> Tháng 06/2026</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slider-dots">
+                    <span class="dot active" onclick="currentSlide(0)"></span>
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 SAOVN - Tổ Chức Hành Động Đặc Biệt Vì Việt Nam. Đồng hành cùng sự nghiệp tài xế Việt.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* JavaScript Xử Lý Slider Tin Tức */
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide-item');
+        const dots = document.querySelectorAll('.dot');
+        const track = document.getElementById('sliderTrack');
+        const totalSlides = slides.length;
+
+        function updateSlider() {
+            track.style.transform = `translateX(-${slideIndex * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === slideIndex);
+            });
+        }
+
+        function moveSlide(direction) {
+            slideIndex = (slideIndex + direction + totalSlides) % totalSlides;
+            updateSlider();
+        }
+
+        function currentSlide(index) {
+            slideIndex = index;
+            updateSlider();
+        }
+
+        // Tự động chuyển slide sau 5 giây
+        setInterval(() => {
+            moveSlide(1);
+        }, 5000);
+
+        /* Xử lý Form */
+        document.getElementById('driverForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const rawPlate = document.getElementById('license_plate').value;
+            const cleanPlate = rawPlate.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            const fullname = document.getElementById('fullname').value;
+            
+            alert('Cảm ơn anh ' + fullname + '!\nBiển số xe [' + cleanPlate + '] đã được lưu trữ thành công trên hệ thống SAOVN.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
