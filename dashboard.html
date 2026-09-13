@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Tài Xế - SAOVN</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --teal-primary: #00a896;
+            --teal-dark: #028090;
+            --teal-light: #e8f8f5;
+            --brand-red: #da251c;
+            --brand-yellow: #ffde00;
+            --dark-text: #0f172a;
+            --body-text: #334155;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--body-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Top Navbar */
+        nav {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-box {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .logo-sao { color: var(--brand-red); }
+        .logo-vn { color: var(--brand-yellow); }
+
+        .logo-slogan {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--teal-dark);
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+
+        .nav-right-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-profile-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--teal-light);
+            color: var(--teal-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 2px solid var(--teal-primary);
+        }
+
+        .btn-logout {
+            background: #fff;
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger-color);
+            color: #fff;
+        }
+
+        /* Dashboard Content */
+        main {
+            flex: 1;
+            padding: 40px 0;
+        }
+
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            color: var(--dark-text);
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .dashboard-header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .icon-user { background: #e0f2fe; color: #0284c7; }
+        .icon-car { background: #fef3c7; color: #d97706; }
+        .icon-wallet { background: #dcfce7; color: #16a34a; }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 8px;
+        }
+
+        .stat-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .stat-value.money {
+            color: var(--success-color);
+        }
+
+        .skeleton-text {
+            background: #e2e8f0;
+            height: 24px;
+            border-radius: 4px;
+            width: 70%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        footer {
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            padding: 25px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <a href="index.html" class="logo-box">
+                <div class="logo-text"><span class="logo-sao">SAO</span><span class="logo-vn">VN</span></div>
+                <div class="logo-slogan">Tổ Chức Hành Động Đặc Biệt Vì Việt Nam</div>
+            </a>
+
+            <div class="nav-right-group">
+                <div class="user-profile-menu">
+                    <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
+                    <span id="navPhoneDisplay">Đang kết nối...</span>
+                </div>
+                <button class="btn-logout" id="btnLogout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div class="dashboard-header">
+            <h1>Bảng Điều Khiển Tài Xế</h1>
+            <p>Thông tin tài khoản và số dư ký quỹ thời gian thực</p>
+        </div>
+
+        <div class="stats-grid">
+            <!-- Thẻ Họ Tên -->
+            <div class="stat-card">
+                <div class="stat-icon icon-user">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-label">Họ và Tên Tài Xế</div>
+                    <div class="stat-value" id="driverName"><div class="skeleton-text"></div></div>
+                    <div class="stat-desc">Trạng thái: <span id="driverStatus" style="color: var(--success-color); font-weight: bold;">Đang cập nhật...</span></div>
+                </div>
+            </div>
+
+            <!-- Thẻ Biển Số Xe -->
+            <div class="stat-card">
+                <div class="stat-icon icon-car">
+                    <i class="fa-solid fa-car"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-label">Biển Số Xe</div>
+                    <div class="stat-value" id="driverPlate"><div class="skeleton-text"></div></div>
+                    <div class="stat-desc">Phương tiện: <span id="driverVehicleType">Đang cập nhật...</span></div>
+                </div>
+            </div>
+
+            <!-- Thẻ Số Dư Ký Quỹ (Lắng nghe luồng dữ liệu Admin) -->
+            <div class="stat-card">
+                <div class="stat-icon icon-wallet">
+                    <i class="fa-solid fa-wallet"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-label">Số Dư Ký Quỹ</div>
+                    <div class="stat-value money" id="driverBalance"><div class="skeleton-text"></div></div>
+                    <div class="stat-desc">Cập nhật tự động từ Admin</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 SAOVN - Tổ Chức Hành Động Đặc Biệt Vì Việt Nam. Đồng hành cùng sự nghiệp tài xế Việt.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK (v8 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Config saovngo
+        const firebaseConfig = {
+            apiKey: "AIzaSyCd1ZXhTBQlehpnSK5BFQ8tuDcjpEC_h2M",
+            authDomain: "saovngo.firebaseapp.com",
+            projectId: "saovngo",
+            storageBucket: "saovngo.firebasestorage.app",
+            messagingSenderId: "468878555517",
+            appId: "1:468878555517:web:3821e305e83b4ad97c3414",
+            measurementId: "G-RX9Z8N46KE"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Hàm định dạng tiền VNĐ
+        function formatVND(amount) {
+            if (amount === undefined || amount === null) return "0 đ";
+            return new Intl.NumberFormat('vi-VN').format(amount) + " đ";
+        }
+
+        // Lắng nghe trạng thái đăng nhập
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Tách số điện thoại từ email ảo (VD: 0987654321@saovngo.com -> 0987654321)
+                const phone = user.email ? user.email.replace('@saovngo.com', '') : '';
+                document.getElementById('navPhoneDisplay').innerText = phone || user.uid;
+
+                // THIẾT LẬP LUỒNG LẮNG NGHE THỜI GIAN THỰC (Realtime Snapshot)
+                // Tìm document trong collection 'drivers' (hoặc 'users') có ID là số điện thoại
+                const driverRef = db.collection('drivers').doc(phone);
+
+                driverRef.onSnapshot((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        
+                        // Đổ dữ liệu Họ tên
+                        document.getElementById('driverName').innerText = data.hoTen || data.fullName || "Tài xế SAOVN";
+                        document.getElementById('driverStatus').innerText = data.trangThai || "Hoạt động";
+                        
+                        // Đổ dữ liệu Biển số xe & loại xe
+                        document.getElementById('driverPlate').innerText = data.bienSoXe || data.licensePlate || "Chưa cập nhật";
+                        document.getElementById('driverVehicleType').innerText = data.loaiXe || data.vehicleType || "Tự do";
+                        
+                        // Đổ dữ liệu Ký quỹ (Trường do Admin nhập)
+                        const rawDeposit = data.kyQuy ?? data.depositBalance ?? 0;
+                        document.getElementById('driverBalance').innerText = formatVND(rawDeposit);
+                    } else {
+                        // Trường hợp mới đăng ký chưa có record Firestore: Hiển thị mặc định chờ Admin nhập
+                        document.getElementById('driverName').innerText = "Tài khoản mới";
+                        document.getElementById('driverStatus').innerText = "Chờ Admin xác minh";
+                        document.getElementById('driverPlate').innerText = "Chưa cập nhật";
+                        document.getElementById('driverVehicleType').innerText = "Chưa cập nhật";
+                        document.getElementById('driverBalance').innerText = formatVND(0);
+                    }
+                }, (error) => {
+                    console.error("Lỗi kết nối dữ liệu Firestore:", error);
+                    document.getElementById('driverBalance').innerText = "Lỗi tải số dư";
+                });
+
+            } else {
+                // Chưa đăng nhập thì chuyển về login
+                window.location.href = "login.html";
+            }
+        });
+
+        // Đăng xuất
+        document.getElementById('btnLogout').addEventListener('click', () => {
+            auth.signOut().then(() => {
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+</body>
+</html>
