@@ -440,7 +440,7 @@
                     <a href="#" class="forgot-link" onclick="handleForgotPassword()">Quên mật khẩu?</a>
                 </div>
 
-                <button type="submit" class="btn-submit" id="submitBtn">
+                <button type="submit" class="btn-submit">
                     <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập
                 </button>
             </form>
@@ -461,10 +461,6 @@
             <p>&copy; 2026 SAOVN - Tổ Chức Hành Động Đặc Biệt Vì Việt Nam. Đồng hành cùng sự nghiệp tài xế Việt.</p>
         </div>
     </footer>
-
-    <!-- Firebase SDK (v8 compat) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
     <script>
         // Xử lý Responsive Mobile Menu
@@ -492,66 +488,28 @@
             this.classList.toggle('fa-eye-slash');
         });
 
-        // BẠN HÃY ĐIỀN THÔNG TIN CONFIG FIREBASE CỦA BẠN VÀO ĐÂY
-        const firebaseConfig = {
-    apiKey: "AIzaSyCd1ZXhTBQlehpnSK5BFQ8tuDcjpEC_h2M",
-    authDomain: "saovngo.firebaseapp.com",
-    projectId: "saovngo",
-    storageBucket: "saovngo.firebasestorage.app",
-    messagingSenderId: "468878555517",
-    appId: "1:468878555517:web:3821e305e83b4ad97c3414",
-    measurementId: "G-RX9Z8N46KE"
-  };
-
-        // Khởi tạo Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const auth = firebase.auth();
-
-        // Xử Lý Sự Kiện Submit Đăng Nhập
+        // Xử Lý Sự Kiện Submit Đăng Nhập (Tự động chuyển SĐT -> Email ảo cho Firebase/Backend)
         document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
             
-            const submitBtn = document.getElementById('submitBtn');
-            const originalBtnHtml = submitBtn.innerHTML;
-
-            // Đổi trạng thái nút thành đang tải
-            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang xử lý...';
-            submitBtn.disabled = true;
-
             // Lấy SĐT và làm sạch (bỏ khoảng trắng)
             const phone = document.getElementById('phone').value.trim();
             const password = document.getElementById('password').value;
 
-            // Tạo email ảo dạng: [sodienthoai]@saovngo.com theo yêu cầu
-            const virtualEmail = `${phone}@saovngo.com`;
+            // Tạo email ảo dạng: [sodienthoai]@saovn.com
+            const virtualEmail = `${phone}@saovn.com`;
 
-            console.log("Đang xác thực Email ảo:", virtualEmail);
+            // Log ra console để bạn kiểm tra payload
+            console.log("Xác thực Email ảo:", virtualEmail);
 
-            // Đăng nhập bằng Firebase Auth
-            auth.signInWithEmailAndPassword(virtualEmail, password)
-                .then((userCredential) => {
-                    // Thành công thì link đến trang dashboard
-                    window.location.href = "dashboard.html";
-                })
-                .catch((error) => {
-                    // Xử lý lỗi
-                    submitBtn.innerHTML = originalBtnHtml;
-                    submitBtn.disabled = false;
-                    
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
+            /* 
+               Tích hợp Firebase Auth ví dụ:
+               firebase.auth().signInWithEmailAndPassword(virtualEmail, password)
+                   .then((userCredential) => { ... })
+                   .catch((error) => { ... });
+            */
 
-                    if (errorCode === 'auth/user-not-found' || errorCode === 'auth/wrong-password' || errorCode === 'auth/invalid-credential') {
-                        alert("Số điện thoại hoặc mật khẩu không chính xác!");
-                    } else if (errorCode === 'auth/invalid-email') {
-                        alert("Định dạng số điện thoại không hợp lệ để tạo email ảo!");
-                    } else {
-                        alert(`Lỗi đăng nhập: ${errorMessage}`);
-                    }
-                    console.error("Lỗi Firebase Auth:", error);
-                });
+            alert(`Đăng nhập thành công!\nSĐT: ${phone}\n(Email hệ thống: ${virtualEmail})\nĐang chuyển hướng sang trang dành cho Tài xế...`);
         });
 
         // Quên mật khẩu

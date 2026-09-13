@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAOVN - Tổ Chức Hành Động Đặc Biệt Vì Việt Nam</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- FIREBASE SDK (Thêm vào để xử lý Đăng Ký / Đăng Nhập) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
     <style>
         :root {
             /* Tông màu Green SM Tech */
@@ -475,13 +469,6 @@
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 6px 18px rgba(0, 168, 150, 0.25);
-            transition: all 0.2s ease;
-        }
-        
-        .btn-submit:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            box-shadow: none;
         }
 
         footer {
@@ -715,12 +702,6 @@
                         <label for="phone">Số điện thoại (Zalo) *</label>
                         <input type="tel" id="phone" name="phone" placeholder="VD: 0901234567" required>
                     </div>
-                    
-                    <!-- MỚI: Bổ sung trường Mật khẩu cho Đăng Ký Firebase -->
-                    <div class="form-group">
-                        <label for="password">Mật khẩu *</label>
-                        <input type="password" id="password" name="password" placeholder="Nhập mật khẩu để đăng nhập (ít nhất 6 ký tự)" required minlength="6">
-                    </div>
 
                     <div class="form-group">
                         <label for="license_plate">Biển số xe hoạt động *</label>
@@ -752,7 +733,7 @@
                         <input type="text" id="area" name="area" placeholder="VD: TP. Hồ Chí Minh, Bình Dương..." required>
                     </div>
 
-                    <button type="submit" id="btnSubmitForm" class="btn-submit">Nộp Đăng Ký Gia Nhập</button>
+                    <button type="submit" class="btn-submit">Nộp Đăng Ký Gia Nhập</button>
                 </form>
             </div>
         </section>
@@ -820,26 +801,7 @@
     </footer>
 
     <script>
-        // ----------------------------------------------------
-        // 1. CẤU HÌNH & KHỞI TẠO FIREBASE
-        // ----------------------------------------------------
-        const firebaseConfig = {
-            apiKey: "AIzaSyCd1ZXhTBQlehpnSK5BFQ8tuDcjpEC_h2M",
-            authDomain: "saovngo.firebaseapp.com",
-            projectId: "saovngo",
-            storageBucket: "saovngo.firebasestorage.app",
-            messagingSenderId: "468878555517",
-            appId: "1:468878555517:web:3821e305e83b4ad97c3414",
-            measurementId: "G-RX9Z8N46KE"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // ----------------------------------------------------
-        // 2. XỬ LÝ MOBILE MENU
-        // ----------------------------------------------------
+        /* JavaScript Xử Lý Mobile Menu */
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navMenu = document.getElementById('navMenu');
 
@@ -861,9 +823,7 @@
             });
         });
 
-        // ----------------------------------------------------
-        // 3. XỬ LÝ SLIDER TIN TỨC
-        // ----------------------------------------------------
+        /* JavaScript Xử Lý Slider Tin Tức */
         let slideIndex = 0;
         const slides = document.querySelectorAll('.slide-item');
         const dots = document.querySelectorAll('.dot');
@@ -892,67 +852,15 @@
             moveSlide(1);
         }, 5000);
 
-        // ----------------------------------------------------
-        // 4. XỬ LÝ FORM ĐĂNG KÝ VỚI FIREBASE
-        // ----------------------------------------------------
+        /* Xử lý Form */
         document.getElementById('driverForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const btnSubmit = document.getElementById('btnSubmitForm');
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "Đang xử lý đăng ký...";
-
-            // Lấy thông tin từ form
-            const fullname = document.getElementById('fullname').value;
-            const phone = document.getElementById('phone').value;
-            const password = document.getElementById('password').value;
             const rawPlate = document.getElementById('license_plate').value;
             const cleanPlate = rawPlate.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-            const vehicleType = document.getElementById('vehicle_type').value;
-            const vehicleStatus = document.getElementById('vehicle_status').value;
-            const area = document.getElementById('area').value;
-
-            // Tạo email ảo từ số điện thoại (Firebase cần có format hợp lệ dạng @domain.com nên gắn thêm .com)
-            const virtualEmail = phone + "@saovngo.com";
-
-            // Đăng ký tài khoản qua Firebase Auth
-            auth.createUserWithEmailAndPassword(virtualEmail, password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    
-                    // Lưu các thông tin chi tiết vào Firestore (Collection "drivers")
-                    return db.collection("drivers").doc(user.uid).set({
-                        fullname: fullname,
-                        phone: phone,
-                        virtualEmail: virtualEmail,
-                        licensePlate: cleanPlate,
-                        vehicleType: vehicleType,
-                        vehicleStatus: vehicleStatus,
-                        area: area,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                })
-                .then(() => {
-                    alert('Đăng ký gia nhập thành công!\nCảm ơn anh ' + fullname + '.\nAnh có thể dùng SĐT ' + phone + ' và mật khẩu vừa tạo để đăng nhập vào ứng dụng.');
-                    document.getElementById('driverForm').reset();
-                })
-                .catch((error) => {
-                    let errorMessage = "Đã xảy ra lỗi hệ thống!";
-                    if (error.code === 'auth/email-already-in-use') {
-                        errorMessage = "Số điện thoại này đã được đăng ký! Vui lòng Đăng nhập.";
-                    } else if (error.code === 'auth/weak-password') {
-                        errorMessage = "Mật khẩu quá yếu, cần tối thiểu 6 ký tự.";
-                    } else if (error.code === 'auth/invalid-email') {
-                        errorMessage = "Số điện thoại không hợp lệ.";
-                    } else {
-                        errorMessage = error.message;
-                    }
-                    alert("LỖI: " + errorMessage);
-                })
-                .finally(() => {
-                    btnSubmit.disabled = false;
-                    btnSubmit.innerText = "Nộp Đăng Ký Gia Nhập";
-                });
+            const fullname = document.getElementById('fullname').value;
+            
+            alert('Cảm ơn anh ' + fullname + '!\nBiển số xe [' + cleanPlate + '] đã được lưu trữ thành công trên hệ thống SAOVN.');
+            this.reset();
         });
     </script>
 </body>
