@@ -323,6 +323,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
+        // Config saovngo
         const firebaseConfig = {
             apiKey: "AIzaSyCd1ZXhTBQlehpnSK5BFQ8tuDcjpEC_h2M",
             authDomain: "saovngo.firebaseapp.com",
@@ -339,6 +340,7 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // Hàm định dạng tiền VNĐ
         function formatVND(amount) {
             if (amount === undefined || amount === null) return "0 đ";
             return new Intl.NumberFormat('vi-VN').format(amount) + " đ";
@@ -347,53 +349,49 @@
         // Lắng nghe trạng thái đăng nhập
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // Truy vấn document theo user.uid (khớp hoàn toàn với lúc đăng ký ở index.html)
-                const driverRef = db.collection('drivers').doc(user.uid);
+                // Tách số điện thoại từ email ảo (VD: 0987654321@saovngo.com -> 0987654321)
+                const phone = user.email ? user.email.replace('@saovngo.com', '') : '';
+                document.getElementById('navPhoneDisplay').innerText = phone || user.uid;
+
+                // THIẾT LẬP LUỒNG LẮNG NGHE THỜI GIAN THỰC (Realtime Snapshot)
+                // Tìm document trong collection 'drivers' (hoặc 'users') có ID là số điện thoại
+                const driverRef = db.collection('drivers').doc(phone);
 
                 driverRef.onSnapshot((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
                         
-                        // Hiển thị SĐT trên thanh navbar
-                        document.getElementById('navPhoneDisplay').innerText = data.phone || "Tài xế SAOVN";
-
-                        // Đổ dữ liệu Họ tên & Trạng thái
-                        document.getElementById('driverName').innerText = data.fullname || "Chưa cập nhật tên";
+                        // Đổ dữ liệu Họ tên
+                        document.getElementById('driverName').innerText = data.hoTen || data.fullName || "Tài xế SAOVN";
                         document.getElementById('driverStatus').innerText = data.trangThai || "Hoạt động";
                         
                         // Đổ dữ liệu Biển số xe & loại xe
-                        document.getElementById('driverPlate').innerText = data.licensePlate || "Chưa cập nhật";
+                        document.getElementById('driverPlate').innerText = data.bienSoXe || data.licensePlate || "Chưa cập nhật";
+                        document.getElementById('driverVehicleType').innerText = data.loaiXe || data.vehicleType || "Tự do";
                         
-                        let vTypeMap = {
-                            "2wheel": "Xe 2 bánh (Xe máy)",
-                            "4wheel_4seat": "Xe 4 bánh (4 - 5 chỗ)",
-                            "4wheel_7seat": "Xe 4 bánh (7 chỗ)"
-                        };
-                        document.getElementById('driverVehicleType').innerText = vTypeMap[data.vehicleType] || data.vehicleType || "Tự do";
-                        
-                        // Lắng nghe trường ký quỹ do Admin nhập (trường: kyQuy)
-                        const rawDeposit = data.kyQuy ?? 0;
+                        // Đổ dữ liệu Ký quỹ (Trường do Admin nhập)
+                        const rawDeposit = data.kyQuy ?? data.depositBalance ?? 0;
                         document.getElementById('driverBalance').innerText = formatVND(rawDeposit);
                     } else {
-                        document.getElementById('navPhoneDisplay').innerText = user.email ? user.email.replace('@saovngo.com', '') : user.uid;
-                        document.getElementById('driverName').innerText = "Tài khoản mới tạo";
-                        document.getElementById('driverStatus').innerText = "Chờ Admin cấu hình";
+                        // Trường hợp mới đăng ký chưa có record Firestore: Hiển thị mặc định chờ Admin nhập
+                        document.getElementById('driverName').innerText = "Tài khoản mới";
+                        document.getElementById('driverStatus').innerText = "Chờ Admin xác minh";
                         document.getElementById('driverPlate').innerText = "Chưa cập nhật";
                         document.getElementById('driverVehicleType').innerText = "Chưa cập nhật";
                         document.getElementById('driverBalance').innerText = formatVND(0);
                     }
                 }, (error) => {
-                    console.error("Lỗi đồng bộ Firestore:", error);
+                    console.error("Lỗi kết nối dữ liệu Firestore:", error);
                     document.getElementById('driverBalance').innerText = "Lỗi tải số dư";
                 });
 
             } else {
-                // Chưa đăng nhập -> Chuyển hướng về trang đăng nhập
+                // Chưa đăng nhập thì chuyển về login
                 window.location.href = "login.html";
             }
         });
 
-        // Xử lý nút Đăng xuất
+        // Đăng xuất
         document.getElementById('btnLogout').addEventListener('click', () => {
             auth.signOut().then(() => {
                 window.location.href = "login.html";

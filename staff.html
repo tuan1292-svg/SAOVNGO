@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra Cứu Biển Số - Nhân Viên Tư Vấn SAOVN</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --teal-primary: #00a896;
+            --teal-dark: #028090;
+            --teal-light: #e8f8f5;
+            --brand-red: #da251c;
+            --brand-yellow: #ffde00;
+            --dark-text: #0f172a;
+            --body-text: #334155;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --danger-color: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--body-text); min-height: 100vh; display: flex; flex-direction: column; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; width: 100%; }
+
+        nav { background: #ffffff; border-bottom: 1px solid var(--border-color); padding: 12px 0; position: sticky; top: 0; z-index: 1000; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo-text { font-size: 1.8rem; font-weight: 900; line-height: 1; }
+        .logo-sao { color: var(--brand-red); }
+        .logo-vn { color: var(--brand-yellow); }
+        .staff-badge { background: #e0f2fe; color: #0284c7; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; }
+
+        #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .login-card { background: #ffffff; padding: 40px; border-radius: 20px; width: 100%; max-width: 420px; text-align: center; box-shadow: 0 20px 25px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 16px; text-align: left; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; }
+        .form-group input { width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 10px; outline: none; background: #f8fafc; }
+        .btn-login { width: 100%; background: var(--teal-primary); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        .login-error { color: var(--danger-color); font-size: 0.85rem; margin-top: 14px; display: none; }
+
+        #staffDashboard { display: none; flex: 1; padding: 30px 0; }
+        .quick-checker-card { background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-primary) 100%); border-radius: 16px; padding: 24px; color: white; margin-bottom: 30px; }
+        .quick-checker-card input { width: 100%; padding: 14px 18px; border-radius: 12px; border: none; font-size: 1.1rem; font-weight: 700; outline: none; text-transform: uppercase; color: var(--dark-text); }
+        .search-result-popup { margin-top: 12px; padding: 14px; border-radius: 10px; background: rgba(255,255,255,0.15); display: none; font-size: 0.95rem; }
+
+        .table-card { background: #ffffff; border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.92rem; }
+        th, td { padding: 14px 18px; border-bottom: 1px solid var(--border-color); }
+        th { background: var(--teal-light); color: var(--teal-dark); font-weight: 800; text-transform: uppercase; font-size: 0.78rem; }
+        .badge-registered { background: #dcfce7; color: #16a34a; padding: 4px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; }
+        .btn-logout { background: #fee2e2; color: var(--danger-color); border: 1px solid #fecaca; padding: 6px 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+        footer { background: #ffffff; border-top: 1px solid var(--border-color); padding: 20px 0; text-align: center; font-size: 0.85rem; color: #64748b; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <div id="loginScreen">
+        <div class="login-card">
+            <h2>Đăng Nhập Nhân Viên</h2>
+            <p>Cổng tra cứu thực địa SAOVN</p>
+            <form id="loginForm">
+                <div class="form-group"><label>Email</label><input type="email" id="staffEmail" required></div>
+                <div class="form-group"><label>Mật Khẩu</label><input type="password" id="staffPassword" required></div>
+                <button type="submit" class="btn-login">Đăng Nhập</button>
+                <div class="login-error" id="loginError">Sai tài khoản hoặc mật khẩu!</div>
+            </form>
+        </div>
+    </div>
+
+    <nav>
+        <div class="container nav-container">
+            <div class="logo-text"><span class="logo-sao">SAO</span><span class="logo-vn">VN</span></div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span class="staff-badge"><i class="fa-solid fa-user-tie"></i> Nhân Viên Tư Vấn</span>
+                <button class="btn-logout" id="btnLogout">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container" id="staffDashboard">
+        <div style="margin-bottom: 24px;">
+            <h1>Tra Cứu Biển Số Đi Đường</h1>
+            <p style="color: #64748b;">Kiểm tra nhanh để tránh tư vấn trùng lặp tài xế.</p>
+        </div>
+
+        <div class="quick-checker-card">
+            <h3><i class="fa-solid fa-car-tunnel"></i> Nhập Biển Số Xe Cần Kiểm Tra</h3>
+            <div style="margin-top: 12px;"><input type="text" id="quickPlateInput" placeholder="Nhập biển số (VD: 59A12345)..."></div>
+            <div class="search-result-popup" id="quickResultPopup"></div>
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Họ Tên & SĐT Tài Xế</th>
+                        <th>Biển Số Xe</th>
+                        <th>Khu Vực</th>
+                        <th>Trạng Thái</th>
+                    </tr>
+                </thead>
+                <tbody id="staffTableBody">
+                    <tr><td colspan="5" style="text-align: center; padding: 20px;">Đang tải...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer><div class="container"><p>&copy; 2026 SAOVN Staff Portal</p></div></footer>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCd1ZXhTBQlehpnSK5BFQ8tuDcjpEC_h2M",
+            authDomain: "saovngo.firebaseapp.com",
+            projectId: "saovngo",
+            storageBucket: "saovngo.firebasestorage.app",
+            messagingSenderId: "468878555517",
+            appId: "1:468878555517:web:3821e305e83b4ad97c3414",
+            measurementId: "G-RX9Z8N46KE"
+        };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        let allDriversData = [];
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('staffDashboard').style.display = 'block';
+                loadData();
+            } else {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('staffDashboard').style.display = 'none';
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            auth.signInWithEmailAndPassword(document.getElementById('staffEmail').value, document.getElementById('staffPassword').value)
+                .catch(() => document.getElementById('loginError').style.display = 'block');
+        });
+
+        document.getElementById('btnLogout').addEventListener('click', () => auth.signOut());
+
+        function loadData() {
+            db.collection("drivers").onSnapshot((snapshot) => {
+                allDriversData = [];
+                snapshot.forEach(doc => allDriversData.push({ id: doc.id, ...doc.data() }));
+                
+                const tbody = document.getElementById('staffTableBody');
+                if(allDriversData.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Chưa có dữ liệu.</td></tr>`;
+                    return;
+                }
+                let html = '';
+                allDriversData.forEach((d, idx) => {
+                    html += `<tr>
+                        <td>${idx + 1}</td>
+                        <td><b>${d.fullname || 'N/A'}</b><br><span style="font-size:0.8rem;color:#64748b">${d.phone || 'N/A'}</span></td>
+                        <td><b style="color:var(--teal-dark)">${d.licensePlate || 'N/A'}</b></td>
+                        <td>${d.area || 'N/A'}</td>
+                        <td><span class="badge-registered">Đã ghi nhận</span></td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+            });
+        }
+
+        const quickInput = document.getElementById('quickPlateInput');
+        const popup = document.getElementById('quickResultPopup');
+        quickInput.addEventListener('input', (e) => {
+            const q = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            if(!q || q.length < 2) { popup.style.display = 'none'; return; }
+            const matched = allDriversData.filter(d => (d.licensePlate || '').includes(q));
+            if(matched.length > 0) {
+                popup.innerHTML = `<b style="color:#ffde00">⚠️ ĐÃ CÓ TRONG HỆ THỐNG:</b><br>` + matched.map(m => `- ${m.licensePlate} (${m.fullname} - ${m.phone})`).join('<br>');
+                popup.style.background = 'rgba(217, 37, 28, 0.4)';
+            } else {
+                popup.innerHTML = `✅ <b>AN TOÀN:</b> Biển số chứa <b>"${q}"</b> chưa có. Thoải mái tư vấn!`;
+                popup.style.background = 'rgba(16, 185, 129, 0.3)';
+            }
+            popup.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
